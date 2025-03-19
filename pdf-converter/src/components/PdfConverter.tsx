@@ -35,7 +35,33 @@ export default function PdfConverter() {
       link.remove();
       
     } catch (err) {
-      setError('Conversion failed. Please check your input.');
+      // Enhanced error handling
+      let errorMessage = 'Conversion failed. Please check your input.';
+      
+      if (axios.isAxiosError(err)) {
+        // Handle Axios-specific errors
+        if (err.response) {
+          // Try to read server error message
+          if (err.response.data instanceof Blob) {
+            const errorData = await err.response.data.text();
+            try {
+              const jsonError = JSON.parse(errorData);
+              errorMessage = jsonError.message || errorData;
+            } catch {
+              errorMessage = errorData;
+            }
+          } else {
+            errorMessage = err.response.data?.message || err.message;
+          }
+        } else {
+          errorMessage = err.message;
+        }
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+
+      console.error('Conversion Error:', err);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
