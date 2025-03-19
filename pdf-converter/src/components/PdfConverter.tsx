@@ -17,7 +17,7 @@ export default function PdfConverter() {
     try {
       setLoading(true);
       const payload = typeof data === 'string' ? { text: data } : data;
-      const response = await axios.post('http://localhost:5000/convert', payload, {
+      const response = await axios.post('http://3.91.39.236:5000/convert', payload, {
         headers: {
           'Content-Type': typeof data === 'string' 
             ? 'application/json' 

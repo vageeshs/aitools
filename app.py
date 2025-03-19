@@ -3,7 +3,7 @@ from flask import Flask, request, send_file, jsonify
 from flask_cors import CORS
 import tempfile
 import os
-import deepseek_to_pdf
+from deepseek_to_pdf import deepseek_to_pdf
 
 app = Flask(__name__)
 CORS(app)
