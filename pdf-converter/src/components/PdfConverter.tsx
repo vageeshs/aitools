@@ -16,7 +16,13 @@ export default function PdfConverter() {
   const convertDocument = async (data: FormData | string) => {
     try {
       setLoading(true);
-      const response = await axios.post('http://localhost:5000/convert', data, {
+      const payload = typeof data === 'string' ? { text: data } : data;
+      const response = await axios.post('http://localhost:5000/convert', payload, {
+        headers: {
+          'Content-Type': typeof data === 'string' 
+            ? 'application/json' 
+            : 'multipart/form-data'
+        },
         responseType: 'blob'
       });
 
@@ -53,7 +59,7 @@ export default function PdfConverter() {
 
         <div className="flex items-center gap-4 mb-6">
           <button
-            onClick={() => convertDocument({ text })}
+            onClick={() => convertDocument(text)}
             disabled={loading}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
           >
